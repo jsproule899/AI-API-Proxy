@@ -1,7 +1,7 @@
 require('dotenv').config();
 const needle = require('needle');
 const url = require('url');
-import { ElevenLabsClient, ElevenLabs } from "elevenlabs";
+
 
 //create the route
 const streamUnrealSpeech = async (req, res) => {
@@ -69,20 +69,33 @@ const speechUnrealSpeech = async (req, res) => {
 const elevenLabs = async (req, res) => {
     const { text, voice } = req.body;
     
+    try {
+        const params = new URLSearchParams({
+            ...url.parse(req.url, true).query //Query parameters passed to the proxy e.g city here
+        })
 
-    const client = new ElevenLabsClient({ apiKey: process.env.E11LABS_API_KEY });
-    const apiResponse = await client.textToSpeech.convert(voice, {
-        optimize_streaming_latency: ElevenLabs.OptimizeStreamingLatency.Zero,
-        output_format: ElevenLabs.OutputFormat.Mp344100128,
-        text: text,
-    });
+        const data = req.body;
+        const options = {
+            headers: {
+                'xi-api-key': `${process.env.E11LABS_API_KEY}`,
+                'Content-Type': 'application/json'
 
-    if (apiResponse.statusCode == 200) {
-        res.set('Content-Type', 'audio/mpeg');
-        res.send(apiResponse.body);
-    } else {
-        res.set('Content-Type', 'plain/text');
-        res.status(apiResponse.statusCode).send(apiResponse.body);
+            }
+        };
+        //Call the actual api here using needle
+        const apiResponse = await needle('post', `${process.env.ELEVENLABS_URL}/${voice}?${params}`, data, options);
+
+        if (apiResponse.statusCode == 200) {
+            res.set('Content-Type', 'audio/mpeg');
+            res.send(apiResponse.body);
+        } else {
+            res.set('Content-Type', 'plain/text');
+            res.status(apiResponse.statusCode).send(apiResponse.body);
+        }
+    }
+    catch (err) {
+        console.log(err.message);
+        res.status(500).json(err.message);
     }
 }
 
