@@ -14,7 +14,7 @@ const OpenAITranscription = async (req, res) => {
     const transcription = await openai.audio.transcriptions.create({
         file: new File([req.body], "transcribe.wav"),
         model: "whisper-1",
-        Language: "en"
+        language: "en"
     }).catch(async (err) => {
         if (err instanceof OpenAI.APIError) {
             console.log(err.status); // 400

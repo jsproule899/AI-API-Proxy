@@ -75,6 +75,8 @@ const elevenLabs = async (req, res) => {
         })
 
         const data = req.body;
+        data.model_id = "eleven_turbo_v2";
+
         const options = {
             headers: {
                 'xi-api-key': `${process.env.E11LABS_API_KEY}`,
