@@ -22,10 +22,16 @@ app.use(
     })
   );
 
+app.use(express.static("Build"));
 
 app.use('/api/stt', require('./routes/sttRoute'))
 app.use('/api/aichat', require('./routes/aiChatRoute'))
 app.use('/api/tts', require('./routes/ttsRoute'))
+
+app.get('/:id', (req, res) =>{
+  res.sendFile("index.html")
+}
+)
 
 
 app.all("*", (request, response, next) => {
