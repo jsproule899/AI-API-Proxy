@@ -3,7 +3,10 @@ const cors = require('cors');
 const morgan = require('morgan');
 
 const app = express();
-app.use(cors());
+var corsOptions = {
+  origin: ["http://localhost:3030","https://ai-api-proxy-3xie.onrender.com"]
+}
+app.use(cors(corsOptions));
 
 //Http logger
 app.use(morgan('tiny'));
