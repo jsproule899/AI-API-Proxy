@@ -37,6 +37,35 @@ const OpenAIChat = async (req, res) => {
 
 }
 
+const OpenAIModels = async (req, res) => {
+    try {
+        const options = {
+            headers: {
+                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+                'Content-Type': 'application/json'
+
+            }
+        };
+        //Call the actual api here using needle
+        const apiResponse = await needle('get', `${process.env.OPENAI_URL}/models`, options);
+       
+
+        if (apiResponse.statusCode == 200) {
+            res.set('Content-Type', 'application/json')
+            res.send(apiResponse.body.data)
+        } else {
+            res.set('Content-Type', 'plain/text')
+            res.status(apiResponse.statusCode).send(apiResponse.body);
+        }
+    }
+    catch (err) {
+        console.log(err.message)
+        res.status(500).json(err.message);
+    }
+}
+
+
+
 const AnthropicChat = async (req, res) => {
     const { messages, model } = req.body;
     const system = messages.shift().content;
@@ -52,18 +81,18 @@ const AnthropicChat = async (req, res) => {
             console.log(err.status); // 400
             console.log(err.name); // BadRequestError
             console.log(err.headers); // {server: 'nginx', ...}
-            console.log(err.message);            
+            console.log(err.message);
         } else {
             throw err;
         }
     });
- 
+
     if (message?.type === "message") {
-        const response = { message: message.content[0].text.substring(message.content[0].text.lastIndexOf('*')+1) }
+        const response = { message: message.content[0].text.substring(message.content[0].text.lastIndexOf('*') + 1) }
 
         res.set('Content-Type', 'application/json')
         res.status(200).json(response);
-    } else if (message?.type === "error") { 
+    } else if (message?.type === "error") {
         res.json(message.error)
     }
     else {
@@ -74,5 +103,6 @@ const AnthropicChat = async (req, res) => {
 
 module.exports = {
     OpenAIChat,
+    OpenAIModels,
     AnthropicChat
 }

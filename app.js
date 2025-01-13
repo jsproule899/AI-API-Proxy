@@ -1,12 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+require('dotenv').config();
+const db = require('./config/db')
 
-const app = express();
-var corsOptions = {
-  origin: ["http://localhost:3030","https://ai-api-proxy-3xie.onrender.com"]
-}
-app.use(cors(corsOptions));
+const app = express()
+
+
+
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS.split(' ') || ''
+}));
 
 //Http logger
 app.use(morgan('tiny'));
@@ -30,11 +34,7 @@ app.use(express.static("Build"));
 app.use('/api/stt', require('./routes/sttRoute'))
 app.use('/api/aichat', require('./routes/aiChatRoute'))
 app.use('/api/tts', require('./routes/ttsRoute'))
-
-app.get('/:id', (req, res) =>{
-  res.sendFile("index.html")
-}
-)
+app.use('/api/scenario', require('./routes/scenarioRoute'))
 
 
 app.all("*", (request, response, next) => {
