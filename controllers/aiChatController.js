@@ -18,7 +18,7 @@ const OpenAIChat = async (req, res) => {
                 console.log(err.name); // BadRequestError
                 console.log(err.headers); // {server: 'nginx', ...}
                 console.log(err.message);
-                res.json(err);
+               return res.json(err);
             } else {
                 throw err;
             }
@@ -82,6 +82,7 @@ const AnthropicChat = async (req, res) => {
             console.log(err.name); // BadRequestError
             console.log(err.headers); // {server: 'nginx', ...}
             console.log(err.message);
+            return res.json(err);
         } else {
             throw err;
         }

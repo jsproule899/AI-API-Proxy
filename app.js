@@ -35,7 +35,7 @@ app.use('/api/stt', require('./routes/sttRoute'))
 app.use('/api/aichat', require('./routes/aiChatRoute'))
 app.use('/api/tts', require('./routes/ttsRoute'))
 app.use('/api/scenario', require('./routes/scenarioRoute'))
-
+app.use('/api/issue', require('./routes/issueRoute'))
 
 app.all("*", (request, response, next) => {
     return response.status(404).json({ message: "Endpoint not found!" });

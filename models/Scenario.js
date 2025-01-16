@@ -2,73 +2,72 @@ const mongoose = require("mongoose");
 
 const ScenarioSchema = new mongoose.Schema(
     {
-
-        "Context": {
-            "type": "String"
+        Context: {
+            type: String
         },
-        "Name": {
-            "type": "String"
+        Name: {
+            type: String
         },
-        "Self": {
-            "type": "Boolean"
+        Self: {
+            type: Boolean
         },
-        "Other_Person": {
-            "Name": {
-                "type": "String"
+        Other_Person: {
+            Name: {
+                type: String
             },
-            "Age": {
-                "type": "string"
+            Age: {
+                type: String
             },
-            "Gender": {
-                "type": "String"
+            Gender: {
+                type: String
             },
-            "Relationship": {
-                "type": "String"
+            Relationship: {
+                type: String
             }
         },
-        "Age": {
-            "type": "string"
+        Age: {
+            type: String
         },
-        "Gender": {
-            "type": "String"
+        Gender: {
+            type: String
         },
-        "Medicines": {
-            "type": "String"
+        Medicines: {
+            type: String
         },
-        "AdditionalMeds": {
-            "type": "String"
+        AdditionalMeds: {
+            type: String
         },
-        "History": {
-            "type": "String"
+        History: {
+            type: String
         },
-        "Symptoms": {
-            "type": "String"
+        Symptoms: {
+            type: String
         },
-        "Allergies": {
-            "type": "String"
+        Allergies: {
+            type: String
         },
-        "Time": {
-            "type": "String"
+        Time: {
+            type: String
         },
-        "Outcome": {
-            "type": "String"
+        Outcome: {
+            type: String
         },
-        "AI": {
-            "type": "String"
+        AI: {
+            type: String
         },
-        "Model": {
-            "type": "String"
+        Model: {
+            type: String
         },
-        "TTS": {
-            "type": "String"
+        TTS: {
+            type: String
         },
-        "Voice": {
-            "type": "String"
+        Voice: {
+            type: String
         },
-        "Avatar": {
-            "type": "String"
+        Avatar: {
+            type: String
         }
-    }, {timestamps:true}
+    }, { timestamps: true }
 );
 
 
