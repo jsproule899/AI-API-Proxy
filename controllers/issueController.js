@@ -4,7 +4,7 @@ const Issue = require('../models/Issue')
 
 const find = async (req, res) => {
 
-    Issue.find().then(issues => {
+    Issue.find().populate('Scenario').then(issues => {
         res.json(issues)
     }).catch(err => res.status(500).json(err.message))
 
@@ -20,7 +20,7 @@ const findById = async (req, res) => {
 
 const create = async (req, res) => {
 
-    const SaveIssue = new Issue({ ...req.body, Status:"NEW" })
+    const SaveIssue = new Issue({ ... req.body, Status:"NEW" })
     SaveIssue.save().then(savedIssue => {
         res.status(201).json(savedIssue)
     }).catch(err => res.status(500).json(err.message))

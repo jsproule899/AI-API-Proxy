@@ -4,7 +4,7 @@ const Scenario = mongoose.model("Scenario", ScenarioSchema);
 
 const IssueSchema = new mongoose.Schema(
     {
-
+       
         Category: {
             type: String
         },
