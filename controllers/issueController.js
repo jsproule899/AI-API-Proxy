@@ -1,4 +1,3 @@
-const { default: mongoose } = require('mongoose')
 const Issue = require('../models/Issue')
 
 
