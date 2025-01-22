@@ -7,16 +7,19 @@ const Anthropic = require('@anthropic-ai/sdk');
 
 const openai = new OpenAI();
 const anthropic = new Anthropic();
+const deepseek = new OpenAI({
+    baseURL: process.env.DEEPSEEK_URL,
+    apiKey: process.env.DEEPSEEK_API_KEY
+});
 
 
-//create the route
 const OpenAIChat = async (req, res) => {
     const chatCompletion = await openai.chat.completions.create(req.body)
         .catch(async (err) => {
             if (err instanceof OpenAI.APIError) {
-                console.log(err.status); // 400
-                console.log(err.name); // BadRequestError
-                console.log(err.headers); // {server: 'nginx', ...}
+                console.log(err.status); 
+                console.log(err.name); 
+                console.log(err.headers); 
                 console.log(err.message);
                return res.json(err);
             } else {
@@ -102,8 +105,36 @@ const AnthropicChat = async (req, res) => {
     }
 }
 
+const DeepSeekChat = async (req, res) => {
+    const chatCompletion = await deepseek.chat.completions.create(req.body)
+        .catch(async (err) => {
+            if (err instanceof OpenAI.APIError) {
+                console.log(err.status); 
+                console.log(err.name); 
+                console.log(err.headers); 
+                console.log(err.message);
+               return res.json(err);
+            } else {
+                throw err;
+            }
+        });
+
+    if (chatCompletion) {
+
+        const response = { message: chatCompletion.choices[0].message.content }
+
+        res.set('Content-Type', 'application/json')
+        res.json(response);
+    } else {
+        res.set('Content-Type', 'plain/text')
+        res.status(500).send("Error");
+    }
+
+}
+
 module.exports = {
     OpenAIChat,
     OpenAIModels,
-    AnthropicChat
+    AnthropicChat,
+    DeepSeekChat
 }
