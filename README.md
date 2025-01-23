@@ -29,14 +29,17 @@ DB_CONNECTION= Mongo Connection string
 UNREALSPEECH_URL = "https://api.v7.unrealspeech.com"
 ELEVENLABS_URL = "https://api.elevenlabs.io/v1/text-to-speech"
 OPENAI_URL = "https://api.openai.com/v1/"
+DEEPSEEK_URL="https://api.deepseek.com"
+
 
 HF_WHISPER_TURBO_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo"
 HF_WHISPER_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
 
 
 #API Keys
-OPENAI_API_KEY = 
-E11LABS_API_KEY = 
-UNREAL_API_KEY = 
-HUGGINGFACE_API_KEY = 
-ANTHROPIC_API_KEY = 
+OPENAI_API_KEY = "sk-YOUR API KEY"
+E11LABS_API_KEY = "sk-YOUR API KEY"
+UNREAL_API_KEY = "YOUR API KEY"
+HUGGINGFACE_API_KEY = "hf_YOUR API KEY"
+ANTHROPIC_API_KEY = "sk-YOUR API KEY"
+DEEPSEEK_API_KEY="sk-YOUR API KEY"
