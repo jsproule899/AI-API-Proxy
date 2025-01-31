@@ -3,8 +3,8 @@ const Scenario = require('../models/Scenario')
 
 
 const find = async (req, res) => {
-
-    Scenario.find().then(scenarios => {
+    const {page, limit} = req.query;
+    Scenario.find().limit(limit).skip(page*limit).then(scenarios => {
         res.json(scenarios)
     }).catch(err => res.status(500).json(err.message))
 

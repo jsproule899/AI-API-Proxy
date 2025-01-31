@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const ScenarioSchema = new mongoose.Schema(
     {
+        Theme: {
+            type: String
+        },
         Context: {
             type: String
         },
@@ -47,6 +50,12 @@ const ScenarioSchema = new mongoose.Schema(
             type: String
         },
         Time: {
+            type: String
+        },
+        Emotion:  {
+            type: String
+        },
+        AdditionalInfo:  {
             type: String
         },
         Outcome: {
