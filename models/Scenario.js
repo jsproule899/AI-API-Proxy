@@ -11,6 +11,12 @@ const ScenarioSchema = new mongoose.Schema(
         Name: {
             type: String
         },
+        Age: {
+            type: String
+        },
+        Gender: {
+            type: String
+        },
         Self: {
             type: Boolean
         },
@@ -28,16 +34,19 @@ const ScenarioSchema = new mongoose.Schema(
                 type: String
             }
         },
-        Age: {
-            type: String
+        Pregnant: {
+            type: Boolean
         },
-        Gender: {
-            type: String
+        Breastfeeding: {
+            type: Boolean
         },
         Medicines: {
             type: String
         },
         AdditionalMeds: {
+            type: String
+        },
+        Time: {
             type: String
         },
         History: {
@@ -49,13 +58,10 @@ const ScenarioSchema = new mongoose.Schema(
         Allergies: {
             type: String
         },
-        Time: {
+        Emotion: {
             type: String
         },
-        Emotion:  {
-            type: String
-        },
-        AdditionalInfo:  {
+        AdditionalInfo: {
             type: String
         },
         Outcome: {
