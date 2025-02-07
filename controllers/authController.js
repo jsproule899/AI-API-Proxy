@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const SALT_ROUNDS = 12;
-const COOKIE_OPTIONS = { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, }
+var COOKIE_OPTIONS = { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, }
 
-if(process.env.NODE_ENV === 'prod' )
-     COOKIE_OPTIONS = { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, secure: true }
+if (process.env.NODE_ENV === 'prod')
+    COOKIE_OPTIONS = { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, secure: true }
 
 
 const register = (req, res, next) => {
@@ -26,18 +26,23 @@ const register = (req, res, next) => {
 
 const login = async (req, res) => {
     const cookies = req.cookies;
-    var { email, password } = req.body
-    if (!email || !password) return res.status(400).json({ "message": "Email and Password are required" })
-        
-    const user = await userDB.findOne({ Email: email })
-    if (!user) return res.status(404).json({ "message": "The Email Address or Password that was entered is incorrect" })
+    var { identifier, password } = req.body
+    if (!identifier || !password) return res.status(400).json({ "message": "Email Address/Student Number and Password are required" })
+
+    const user = await userDB.findOne(
+        {
+            $or: [
+                { Email: identifier },
+                { StudentNo: identifier }]
+        })
+    if (!user) return res.status(404).json({ "message": "The Email Address/Student Number or Password that was entered is incorrect" })
 
     if (user.LoginAttempts >= 3) return res.status(403).json({ "message": "Account locked please reset password." })
 
     bcrypt.compare(password, user.Password).then(async (match) => {
         if (!match) {
             await userDB.findByIdAndUpdate(user._id, { LoginAttempts: user.LoginAttempts + 1 || 1 })
-            return res.status(401).json({ "message": "The Email Address or Password that was entered is incorrect" })
+            return res.status(401).json({ "message": "The Email Address/Student Number or Password that was entered is incorrect" })
         }
         const accessToken = jwt.sign(
             {
@@ -60,14 +65,14 @@ const login = async (req, res) => {
 
         const newRefreshTokenArray = !cookies?.authjwt ? user.RefreshToken : user.RefreshToken.filter(rt => rt !== cookies.authjwt);
 
-        if (cookies?.authjwt) res.clearCookie('authjwt' );
+        if (cookies?.authjwt) res.clearCookie('authjwt');
 
         user.RefreshToken = [...newRefreshTokenArray, newRefreshToken];
         user.LoginAttempts = 0;
         await user.save();
 
         res.cookie('authjwt', newRefreshToken)
-        res.json({ email: user.Email, studentNo: user.StudentNo, roles: user.Roles, accessToken })
+        res.json({ accessToken })
     }).catch((err) => {
         res.json(err.message)
     })
@@ -93,7 +98,6 @@ const refresh = async (req, res) => {
             })
         return res.sendStatus(403);
     }
-    console.log("user found during refresh")
 
     const newRefreshTokenArray = user.RefreshToken.filter(rt => rt !== refreshToken)
 
@@ -129,7 +133,7 @@ const refresh = async (req, res) => {
             await user.save();
 
             res.cookie('authjwt', newRefreshToken, COOKIE_OPTIONS)
-            res.json({ accessToken, email: user.Email, roles: user.Roles, studentNo: user.StudentNo })
+            res.json({ accessToken })
         }
     )
 
