@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const SALT_ROUNDS = 12;
-var COOKIE_OPTIONS = { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, }
+var COOKIE_OPTIONS = { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true }
 
-if (process.env.NODE_ENV === 'prod')
-    COOKIE_OPTIONS = { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, secure: true }
+if (process.env.NODE_ENV === 'dev')
+    COOKIE_OPTIONS = { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }
 
 
 const register = (req, res, next) => {
@@ -65,13 +65,14 @@ const login = async (req, res) => {
 
         const newRefreshTokenArray = !cookies?.authjwt ? user.RefreshToken : user.RefreshToken.filter(rt => rt !== cookies.authjwt);
 
-        if (cookies?.authjwt) res.clearCookie('authjwt');
+        if (cookies?.authjwt) res.clearCookie('authjwt',COOKIE_OPTIONS);
 
         user.RefreshToken = [...newRefreshTokenArray, newRefreshToken];
         user.LoginAttempts = 0;
         await user.save();
 
-        res.cookie('authjwt', newRefreshToken)
+        res.cookie('authjwt', newRefreshToken, COOKIE_OPTIONS)
+        res.cookie('refreshExists', true, {maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true })
         res.json({ accessToken })
     }).catch((err) => {
         res.json(err.message)
@@ -84,7 +85,8 @@ const refresh = async (req, res) => {
 
     if (!cookies?.authjwt) return res.sendStatus(401)
     const refreshToken = cookies.authjwt;
-    res.clearCookie('authjwt')
+    res.clearCookie('authjwt',COOKIE_OPTIONS)
+    res.clearCookie('refreshExists', true, {maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true })
     const user = await userDB.findOne({ RefreshToken: { $in: [refreshToken] } }).exec();
 
     if (!user) {
@@ -133,6 +135,7 @@ const refresh = async (req, res) => {
             await user.save();
 
             res.cookie('authjwt', newRefreshToken, COOKIE_OPTIONS)
+            res.cookie('refreshExists', true, {maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true })
             res.json({ accessToken })
         }
     )
@@ -149,13 +152,13 @@ const logout = async (req, res) => {
 
     const user = await userDB.findOne({ RefreshToken: { $in: [refreshToken] } }).exec();
     if (!user) {
-        res.clearCookie('authjwt')
+        res.clearCookie('authjwt', COOKIE_OPTIONS)
         return res.sendStatus(204);
     }
 
     user.RefreshToken = user.RefreshToken.filter(rt => rt !== refreshToken)
     await user.save();
-    res.clearCookie('authjwt',)
+    res.clearCookie('authjwt', COOKIE_OPTIONS)
     return res.sendStatus(204);
 
 }
