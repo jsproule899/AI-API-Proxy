@@ -7,7 +7,7 @@ const url = require('url');
 const streamUnrealSpeech = async (req, res) => {
     try {
         const params = new URLSearchParams({
-            ...url.parse(req.url, true).query //Query parameters passed to the proxy e.g city here
+            ...url.parse(req.url, true).query 
         })
 
         const data = req.body;
@@ -19,7 +19,7 @@ const streamUnrealSpeech = async (req, res) => {
             }
         };
         //Call the actual api here using needle
-        const apiResponse = await needle('post', `${process.env.UNREALSPEECH_URL}/stream?${params}`, data, options);
+        const apiResponse = await needle('post', `${process.env.UNREALSPEECH_URL}/stream?${params}`, {...data, Text:data.text, VoiceId: data.voice }, options);
 
         if (apiResponse.statusCode == 200) {
             res.set('Content-Type', 'audio/mpeg');
@@ -38,10 +38,12 @@ const streamUnrealSpeech = async (req, res) => {
 const speechUnrealSpeech = async (req, res) => {
     try {
         const params = new URLSearchParams({
-            ...url.parse(req.url, true).query //Query parameters passed to the proxy e.g city here
+            ...url.parse(req.url, true).query 
         })
 
         const data = req.body;
+      
+       
         const options = {
             headers: {
                 'Authorization': `Bearer ${process.env.UNREAL_API_KEY}`,
@@ -50,7 +52,7 @@ const speechUnrealSpeech = async (req, res) => {
             }
         };
         //Call the actual api here using needle
-        const apiResponse = await needle('post', `${process.env.UNREALSPEECH_URL}/speech?${params}`, data, options);
+        const apiResponse = await needle('post', `${process.env.UNREALSPEECH_URL}/speech?${params}`, {...data, Text:data.text, VoiceId: data.voice }, options);
 
         if (apiResponse.statusCode == 200) {
             res.set('Content-Type', 'application/json');

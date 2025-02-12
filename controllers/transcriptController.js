@@ -2,8 +2,8 @@ const Transcript = require('../models/Transcript')
 
 
 const find = async (req, res) => {
-    const {page, limit} = req.query;
-    Transcript.find().limit(limit).skip(page*limit).populate('Scenario').then(Transcripts => {
+    const { page, limit } = req.query;
+    Transcript.find().limit(limit).skip(page * limit).populate('Scenario').then(Transcripts => {
         res.json(Transcripts)
     }).catch(err => res.status(500).json(err.message))
 
@@ -12,6 +12,14 @@ const find = async (req, res) => {
 const findById = async (req, res) => {
     const { id } = req.params;
     Transcript.findById(id).then(Transcript => {
+        res.json(Transcript)
+    }).catch(err => res.status(500).json(err.message))
+
+}
+
+const findByStudent = async (req, res) => {
+    const { studentNo } = req.params;
+    Transcript.find({ Student: studentNo }).then(Transcript => {
         res.json(Transcript)
     }).catch(err => res.status(500).json(err.message))
 
@@ -39,4 +47,4 @@ const remove = async (req, res) => {
     ).catch(err => res.status(500).json(err.message))
 }
 
-module.exports = { create, find, findById, remove, update }
+module.exports = { create, find, findById, findByStudent, remove, update }

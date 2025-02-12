@@ -14,6 +14,9 @@ const TranscriptSchema = new mongoose.Schema(
             type: mongoose.ObjectId,
             ref: Scenario
         },
+        Student: {
+            type: String,
+        },
         //TODO add user       
 
     }, { timestamps: true }
