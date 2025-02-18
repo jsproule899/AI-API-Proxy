@@ -14,15 +14,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    AcademicYear:{
+        type: String 
+    },
     Roles: {
         type: [String],
-        enum: ["superUser", "staff", "student"]
+        enum: ["admin", "staff", "student"]
     },
     RefreshToken: {
         type: [String],
-    },
-    ResetToken: {
-        type: String,
     },
     TempPassword: {
         type: Boolean

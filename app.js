@@ -33,7 +33,7 @@ app.use(
     })
   );
 
-
+//Authenication routes
 app.use('/api/auth', require('./routes/authRoute'))
 
 //unity routes
@@ -42,6 +42,7 @@ app.use('/api/aichat', require('./routes/aiChatRoute'))
 app.use('/api/tts', require('./routes/ttsRoute'))
 app.use('/api/scenario', require('./routes/scenarioRoute'))
 
+//Routes require authenicated user
 app.use(verifyJWT)
 app.use('/api/issue', require('./routes/issueRoute'))
 app.use('/api/transcript', require('./routes/transcriptRoute'))

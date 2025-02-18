@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Email</title>
+
+    <style>
+        body {
+            background-color: #d6000d;
+            font-family: sans-serif;
+
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+
+        .email-body {
+            display: block;
+            background-color: #fafaf9;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding: 25px 50px;
+        }
+
+        .btn-primary {
+            display: block;
+            margin: 40px;
+            background-color: #d6000d;
+            font-weight: bold;
+            color: white;
+            padding: 10px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            text-align: center;
+            justify-self: center;
+        }
+
+        .btn-primary:hover {
+            background-color: darkred;
+        }
+
+        .logo {
+            display: flex;
+        }
+
+        .logo-img {
+            display: flex;
+            padding-right: 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.555);
+            margin: 20px 20px;
+        }
+
+        .logo-heading {
+            display: flex;
+            color: #fff;
+            text-transform: uppercase;
+            margin: 20px 0px;
+            line-height: 1rem;
+            align-content: start;
+
+        }
+    </style>
+
+    <div class="container">
+        <div class="logo">
+            <img src="https://www.qub.ac.uk/schools/media/Media,767339,en.svg"
+                alt="Queens University Belfast School of Pharmacy Logo" height="60px" class="logo-img">
+
+            <div class="logo-heading" style="display: inline-block;">
+                <p style="font-size: small; margin: 0;">School of</p>
+                <p style="font-weight: bold; font-size: medium; margin: 0; line-height: normal;">Pharmacy</p>
+            </div>
+
+        </div>
+
+        <div class="email-body">
+            <h2>Welcome!</h2>
+            <p>Hi {{studentNo}},</p>
+            <p>You've been granted access to the QAIRx Platform. Your temporay password is:</p>
+            <p style="font-weight: 600; text-align: center;">
+                {{password}}
+            </p>
+            <a target="_blank" class="btn-primary" href="https://{{link}}">Login</a>
+            <p>If you didn't request access or no longer require an account, you can simply ignore this message.</p>
+            <hr />
+            <h3>Issue with the link?</h3>
+            <p>Simply copy and paste this link into your browser instead: </p>
+            <a href="{{link}}"></a>
+        </div>
+    </div>
+    </body>
+
+</html>

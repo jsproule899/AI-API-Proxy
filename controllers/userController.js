@@ -11,18 +11,20 @@ const find = async (req, res) => {
 const findById = async (req, res) => {
     const { id } = req.params;
     User.findById(id).then(user => {
-        if(!user) res.status(404).json("No user found")
+        if (!user) res.status(404).json("No user found")
         res.json(user)
     }).catch(err => res.status(500).json(err.message))
 
 }
 
 const findByEmail = async (req, res) => {
-    const {email} = req.email;
-    User.findOne(email).then(user=>{
-        if(!user) res.status(404).json("No user found")
+    const { Email } = req.body;
+    
+    User.findOne({ Email: Email }).then(user => {
+        if (!user) res.status(404).json("No user found")
         res.json(user)
-    }).catch(err=>{ res.satus(500).json(err.message)
+    }).catch(err => {
+        res.status(500).json(err.message)
     })
 }
 
@@ -31,7 +33,6 @@ const create = async (req, res) => {
     SaveUser.save().then(savedUser => {
         res.status(201).json(savedUser)
     }).catch(err => res.status(500).json(err.message))
-
 }
 
 const update = async (req, res) => {

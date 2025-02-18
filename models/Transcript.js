@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const {ScenarioSchema} = require("./Scenario");
 const Scenario = mongoose.model("Scenario", ScenarioSchema);
 
-const TranscriptSchema = new mongoose.Schema(
+const transcriptSchema = new mongoose.Schema(
     {
         Filename: {
             type: String
@@ -17,10 +17,10 @@ const TranscriptSchema = new mongoose.Schema(
         Student: {
             type: String,
         },
-        //TODO add user       
+             
 
     }, { timestamps: true }
 );
 
 
-module.exports = mongoose.model("Transcript", TranscriptSchema);
+module.exports = mongoose.model("Transcript", transcriptSchema);
