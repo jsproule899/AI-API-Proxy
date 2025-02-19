@@ -1,22 +1,36 @@
-const postmark = require("postmark");
+const nodemailer = require("nodemailer");
 const handlebars = require("handlebars");
 const fs = require("fs");
 const path = require("path");
 
 const sendEmail = async (email, subject, payload, template) => {
     try {
-        var client = new postmark.ServerClient(process.env.POSTMARK_CLIENT);
+       
         const source = fs.readFileSync(path.join(__dirname, template), "utf8");
         const compiledTemplate = handlebars.compile(source);
 
-        client.sendEmail({
-            "From": process.env.FROM_EMAIL,
-            "To": email,
-            "Subject": subject,
-            "HtmlBody":  compiledTemplate(payload),            
-            "MessageStream": "outbound"
-          });
-       
+
+        
+        let transporter = nodemailer.createTransport({
+          host: process.env.EMAIL_HOST,
+          secure: true,
+          port: 465,
+          auth: {
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD,
+          },
+        });
+
+
+        const info = await transporter.sendMail({
+            from: process.env.FROM_EMAIL,
+            to:email,
+            subject: subject,          
+            html:  compiledTemplate(payload),
+          });      
+
+          console.log("Email sent: %s", info.messageId);
+              
     } catch (error) {
         return error;
     }

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Email</title>
 
+   
     <style>
         body {
             background-color: #d6000d;
@@ -14,8 +15,11 @@
         }
 
         .container {
-            width: 80%;
-            margin: auto;
+            display: flex;
+            flex-direction: column;
+            justify-self: center;
+            width: 90vw;
+            margin: 10px;
         }
 
         .email-body {
@@ -27,7 +31,9 @@
         }
 
         .btn-primary {
-            display: block;
+            display: flex;
+            width: fit-content;
+            justify-self: center;
             margin: 40px;
             background-color: #d6000d;
             font-weight: bold;
@@ -37,7 +43,7 @@
             border-radius: 5px;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
             text-align: center;
-            justify-self: center;
+
         }
 
         .btn-primary:hover {
@@ -46,6 +52,18 @@
 
         .logo {
             display: flex;
+
+        }
+
+        @media (max-width: 364px) {
+            .logo {
+                width: 20%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: stretch;
+               
+
+            }
         }
 
         .logo-img {
@@ -90,7 +108,7 @@
             <hr />
             <h3>Issue with the link?</h3>
             <p>Simply copy and paste this link into your browser instead: </p>
-            <a href="{{link}}"></a>
+            <a href="https://{{link}}">https://{{link}}</a>
         </div>
     </div>
     </body>

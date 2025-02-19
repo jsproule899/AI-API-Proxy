@@ -56,7 +56,7 @@ const register = async (req, res, next) => {
     })).then((newUser) => {
 
         const link = `${process.env.DOMAIN}/login`;
-        sendEmail(newUser.Email, "Welcome!", { studentNo: StudentNo, password: password, link: link, }, "./template/welcome.handlebars");
+        sendEmail(newUser.Email, "Welcome!", { studentNo: StudentNo, password: password, link: link, }, "./template/welcome.hbs");
         return res.json({ "message": "Welcome email sent!" });
 
     }).catch((err) => {
@@ -149,7 +149,7 @@ const requestReset = async (req, res) => {
 
 
         const link = `${process.env.DOMAIN}/update-password?token=${resetToken}&id=${user._id}`;
-        sendEmail(user.Email, "Password Reset Request", { studentNo: user.StudentNo, link: link, }, "./template/requestResetPassword.handlebars");
+        sendEmail(user.Email, "Password Reset Request", { studentNo: user.StudentNo, link: link, }, "./template/requestResetPassword.hbs");
         return res.json({ "message": "Reset email sent!" });
     } catch (err) {
         res.status(500).json({ "message": err.message });
