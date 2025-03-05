@@ -67,6 +67,31 @@ const OpenAIModels = async (req, res) => {
     }
 }
 
+const openAIRealtimeSession = async (req, res)=>{
+    try {
+        const options = {
+            headers: {
+                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+                'Content-Type': 'application/json'
+
+            }
+        };        
+        
+        const apiResponse = await needle('post', `${process.env.OPENAI_SESSION_URL}`, req.body, options);       
+
+        if (apiResponse.statusCode == 200) {
+            res.set('Content-Type', 'application/json')
+            res.send(apiResponse.body)
+        } else {
+            res.set('Content-Type', 'plain/text')
+            res.status(apiResponse.statusCode).send(apiResponse.body);
+        }
+    }
+    catch (err) {
+        console.log(err.message)
+        res.status(500).json(err.message);
+    }
+}
 
 
 const AnthropicChat = async (req, res) => {
@@ -135,6 +160,7 @@ const DeepSeekChat = async (req, res) => {
 module.exports = {
     OpenAIChat,
     OpenAIModels,
+    openAIRealtimeSession,
     AnthropicChat,
     DeepSeekChat
 }

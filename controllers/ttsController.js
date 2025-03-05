@@ -1,7 +1,9 @@
 require('dotenv').config();
+const OpenAI = require('openai');
 const needle = require('needle');
 const url = require('url');
 
+const openai = new OpenAI();
 
 //create the route
 const unrealSpeech = async (req, res) => {
@@ -71,7 +73,44 @@ const elevenLabs = async (req, res) => {
     }
 }
 
+const openAI = async (req, res) => {
+    try {
+        const { text, voice } = req.body;
+
+        const mp3 = await openai.audio.speech.create({
+            model: "tts-1",
+            voice,
+            input: text
+        }).catch(async (err) => {
+            if (err instanceof OpenAI.APIError) {
+                console.log(err.status);
+                console.log(err.name);
+                console.log(err.headers);
+                console.log(err.message);
+                return res.json(err);
+            } else {
+                throw err;
+            }
+        });
+
+
+        if (mp3) {
+            const buffer = Buffer.from(await mp3.arrayBuffer());
+            res.set('Content-Type', 'audio/mp3')
+            res.send(buffer);
+        } else {
+            res.set('Content-Type', 'plain/text')
+            res.status(500).send("Error");
+        }
+    }
+    catch (err) {
+        console.log(err.message);
+        res.status(500).json(err.message);
+    }
+}
+
 module.exports = {
     unrealSpeech,
-    elevenLabs
+    elevenLabs,
+    openAI
 }
