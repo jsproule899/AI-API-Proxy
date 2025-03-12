@@ -81,6 +81,9 @@ const ScenarioSchema = new mongoose.Schema(
         },
         Avatar: {
             type: String
+        },
+        Visible: {
+            type: Boolean
         }
     }, { timestamps: true }
 );
