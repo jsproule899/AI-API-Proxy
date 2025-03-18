@@ -6,44 +6,34 @@ const url = require('url');
 
 
 //create the route
-const OpenAITranscription = async (req, res) => {
-
-
-    const openai = new OpenAI();    
-  
-    const transcription = await openai.audio.transcriptions.create({
+const OpenAITranscription = (req, res) => {
+    const openai = new OpenAI();
+    openai.audio.transcriptions.create({
         file: new File([req.body], "transcribe.wav"),
         model: "whisper-1",
         language: "en"
-    }).catch(async (err) => {
+    }).then(transcription => {
+        res.set('Content-Type', 'application/json')
+        res.send(transcription)
+    }).catch((err) => {
         if (err instanceof OpenAI.APIError) {
-            console.log(err.status); // 400
-            console.log(err.name); // BadRequestError
-            console.log(err.headers); // {server: 'nginx', ...}
+            console.log(err.status);
+            console.log(err.name);
+            console.log(err.headers);
             console.log(err.message);
             return res.json(err);
         } else {
-            throw err;
+            res.set('Content-Type', 'plain/text')
+            res.status(500).send("Error: " + err);
         }
     });
-
-    if (transcription) {
-        res.set('Content-Type', 'application/json')
-        res.send(transcription)
-    } else {
-        res.set('Content-Type', 'plain/text')
-        res.status(500).send("Error");
-    }
-
 }
 
 
 const HuggingFaceTranscription = async (req, res) => {
-
-      
     try {
         const params = new URLSearchParams({
-            ...url.parse(req.url, true).query //Query parameters passed to the proxy e.g city here
+            ...url.parse(req.url, true).query //Query parameters passed to the proxy
         })
 
         const data = req.body;
@@ -54,9 +44,9 @@ const HuggingFaceTranscription = async (req, res) => {
 
             }
         };
-        //Call the actual api here using needle
+
         const apiResponse = await needle('post', `${process.env.HF_WHISPER_URL}?${params}`, data, options);
-        
+
         if (apiResponse.statusCode == 200) {
             res.set('Content-Type', 'application/json')
             res.send(apiResponse.body)
@@ -66,7 +56,7 @@ const HuggingFaceTranscription = async (req, res) => {
         }
     }
     catch (err) {
-        console.log(err.message)       
+        console.log(err.message)
         res.status(500).json(err.message);
     }
 }

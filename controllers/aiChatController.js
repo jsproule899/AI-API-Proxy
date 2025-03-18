@@ -13,31 +13,25 @@ const deepseek = new OpenAI({
 });
 
 
-const OpenAIChat = async (req, res) => {
-    const chatCompletion = await openai.chat.completions.create(req.body)
-        .catch(async (err) => {
+const OpenAIChat = (req, res) => {
+    openai.chat.completions.create(req.body)
+        .then((chatCompletion) => {
+            const response = { message: chatCompletion.choices[0].message.content }
+            res.set('Content-Type', 'application/json')
+            res.json(response);
+        })
+        .catch((err) => {
             if (err instanceof OpenAI.APIError) {
-                console.log(err.status); 
-                console.log(err.name); 
-                console.log(err.headers); 
+                console.log(err.status);
+                console.log(err.name);
+                console.log(err.headers);
                 console.log(err.message);
-               return res.json(err);
+                return res.json(err);
             } else {
-                throw err;
+                res.set('Content-Type', 'plain/text')
+                res.status(500).send("Error: " + err);
             }
         });
-
-    if (chatCompletion) {
-
-        const response = { message: chatCompletion.choices[0].message.content }
-
-        res.set('Content-Type', 'application/json')
-        res.json(response);
-    } else {
-        res.set('Content-Type', 'plain/text')
-        res.status(500).send("Error");
-    }
-
 }
 
 const OpenAIModels = async (req, res) => {
@@ -51,7 +45,7 @@ const OpenAIModels = async (req, res) => {
         };
         //Call the actual api here using needle
         const apiResponse = await needle('get', `${process.env.OPENAI_URL}/models`, options);
-       
+
 
         if (apiResponse.statusCode == 200) {
             res.set('Content-Type', 'application/json')
@@ -67,7 +61,7 @@ const OpenAIModels = async (req, res) => {
     }
 }
 
-const openAIRealtimeSession = async (req, res)=>{
+const openAIRealtimeSession = async (req, res) => {
     try {
         const options = {
             headers: {
@@ -75,9 +69,9 @@ const openAIRealtimeSession = async (req, res)=>{
                 'Content-Type': 'application/json'
 
             }
-        };        
-        
-        const apiResponse = await needle('post', `${process.env.OPENAI_SESSION_URL}`, req.body, options);       
+        };
+
+        const apiResponse = await needle('post', `${process.env.OPENAI_SESSION_URL}`, req.body, options);
 
         if (apiResponse.statusCode == 200) {
             res.set('Content-Type', 'application/json')
@@ -94,67 +88,60 @@ const openAIRealtimeSession = async (req, res)=>{
 }
 
 
-const AnthropicChat = async (req, res) => {
+const AnthropicChat = (req, res) => {
     const { messages, model } = req.body;
     const system = messages.shift().content;
 
 
-    const message = await anthropic.messages.create({
+    anthropic.messages.create({
         max_tokens: 1024,
         system: system,
         messages: messages,
         model: model,
-    }).catch(async (err) => {
-        if (err instanceof Anthropic.APIError) {
-            console.log(err.status); // 400
-            console.log(err.name); // BadRequestError
-            console.log(err.headers); // {server: 'nginx', ...}
-            console.log(err.message);
-            return res.json(err);
-        } else {
-            throw err;
-        }
-    });
+    })
+        .then((message) => {
+            if (message?.type === "message") {
+                const response = { message: message.content[0].text.substring(message.content[0].text.lastIndexOf('*') + 1) }
 
-    if (message?.type === "message") {
-        const response = { message: message.content[0].text.substring(message.content[0].text.lastIndexOf('*') + 1) }
-
-        res.set('Content-Type', 'application/json')
-        res.status(200).json(response);
-    } else if (message?.type === "error") {
-        res.json(message.error)
-    }
-    else {
-        res.set('Content-Type', 'plain/text')
-        res.status(500).send("Error");
-    }
-}
-
-const DeepSeekChat = async (req, res) => {
-    const chatCompletion = await deepseek.chat.completions.create(req.body)
+                res.set('Content-Type', 'application/json')
+                res.status(200).json(response);
+            } else if (message?.type === "error") {
+                res.json(message.error)
+            }
+        })
         .catch(async (err) => {
-            if (err instanceof OpenAI.APIError) {
-                console.log(err.status); 
-                console.log(err.name); 
-                console.log(err.headers); 
+            if (err instanceof Anthropic.APIError) {
+                console.log(err.status); // 400
+                console.log(err.name); // BadRequestError
+                console.log(err.headers); // {server: 'nginx', ...}
                 console.log(err.message);
-               return res.json(err);
+                return res.json(err);
             } else {
-                throw err;
+                res.set('Content-Type', 'plain/text')
+                res.status(500).send("Error: " + err);
             }
         });
+}
 
-    if (chatCompletion) {
-
-        const response = { message: chatCompletion.choices[0].message.content }
-
-        res.set('Content-Type', 'application/json')
-        res.json(response);
-    } else {
-        res.set('Content-Type', 'plain/text')
-        res.status(500).send("Error");
-    }
-
+const DeepSeekChat = (req, res) => {
+    deepseek.chat.completions.create(req.body)
+        .then((chatCompletion) => {
+            const response = { message: chatCompletion.choices[0].message.content }
+            res.set('Content-Type', 'application/json')
+            res.json(response);
+        })
+        .catch((err) => {
+            if (err instanceof OpenAI.APIError) {
+                console.log(err.status);
+                console.log(err.name);
+                console.log(err.headers);
+                console.log(err.message);
+                return res.json(err);
+            } else {
+                res.set('Content-Type', 'plain/text')
+                res.status(500).send("Error: " + err);
+            }
+        });
 }
 
 module.exports = {

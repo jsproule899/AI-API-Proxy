@@ -43,7 +43,7 @@ const elevenLabs = async (req, res) => {
 
     try {
         const params = new URLSearchParams({
-            ...url.parse(req.url, true).query //Query parameters passed to the proxy e.g city here
+            ...url.parse(req.url, true).query //Query parameters passed to the proxy
         })
 
         const data = req.body;
@@ -73,40 +73,30 @@ const elevenLabs = async (req, res) => {
     }
 }
 
-const openAI = async (req, res) => {
-    try {
-        const { text, voice } = req.body;
+const openAI = (req, res) => {
 
-        const mp3 = await openai.audio.speech.create({
-            model: "tts-1",
-            voice,
-            input: text
-        }).catch(async (err) => {
-            if (err instanceof OpenAI.APIError) {
-                console.log(err.status);
-                console.log(err.name);
-                console.log(err.headers);
-                console.log(err.message);
-                return res.json(err);
-            } else {
-                throw err;
-            }
-        });
+    const { text, voice } = req.body;
 
-
-        if (mp3) {
-            const buffer = Buffer.from(await mp3.arrayBuffer());
-            res.set('Content-Type', 'audio/mp3')
-            res.send(buffer);
+    openai.audio.speech.create({
+        model: "tts-1",
+        voice,
+        input: text
+    }).then((mp3) => {
+        const buffer = Buffer.from(mp3.arrayBuffer());
+        res.set('Content-Type', 'audio/mp3')
+        res.send(buffer);
+    }).catch((err) => {
+        if (err instanceof OpenAI.APIError) {
+            console.log(err.status);
+            console.log(err.name);
+            console.log(err.headers);
+            console.log(err.message);
+            return res.json(err);
         } else {
             res.set('Content-Type', 'plain/text')
-            res.status(500).send("Error");
+            res.status(500).send("Error: " + err);
         }
-    }
-    catch (err) {
-        console.log(err.message);
-        res.status(500).json(err.message);
-    }
+    });
 }
 
 module.exports = {
