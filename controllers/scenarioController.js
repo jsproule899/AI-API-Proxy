@@ -3,8 +3,8 @@ const Scenario = require('../models/Scenario')
 
 
 const find = async (req, res) => {
-    const {page, limit} = req.query;
-    Scenario.find().limit(limit).skip(page*limit).then(scenarios => {
+    const { page, limit } = req.query;
+    Scenario.find().limit(limit).skip(page * limit).then(scenarios => {
         res.json(scenarios)
     }).catch(err => res.status(500).json(err.message))
 
@@ -19,8 +19,9 @@ const findById = async (req, res) => {
 }
 
 const create = async (req, res) => {
-
-    const SaveScenario = new Scenario({ ...req.body, Avatar: assignAvatar(req.body) })
+    let { Avatar } = req.body;
+    if (!Avatar) Avatar = assignAvatar(req.body)
+    const SaveScenario = new Scenario({ ...req.body, Avatar })
     SaveScenario.save().then(savedscenario => {
         res.status(201).json(savedscenario)
     }).catch(err => res.status(500).json(err.message))
@@ -44,11 +45,12 @@ const remove = async (req, res) => {
 const assignAvatar = (body) => {
     const { Gender, Age } = body;
 
-    //TODO
     if (Gender === 'Male') {
         return "male_01"
-    } else {
+    } else if (Gender === "Female") {
         return "female_01"
+    } else if (Gender === "Non-Binary") {
+        return "nonbinary_01"
     }
 
 }
