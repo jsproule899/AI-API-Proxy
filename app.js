@@ -48,6 +48,7 @@ app.use('/api/issue', require('./routes/issueRoute'))
 app.use('/api/transcript', require('./routes/transcriptRoute'))
 app.use('/api/user', require('./routes/userRoute'))
 app.use('/api/voice', require('./routes/voiceRoute'))
+app.use('/api/model', require('./routes/modelRoute'))
 
 
 app.all("*", (request, response, next) => {
