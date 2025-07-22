@@ -2,7 +2,7 @@ const Transcript = require('../models/Transcript')
 
 
 const find = async (req, res) => {
-    const { page, limit } = req.query;
+    const { page=0, limit=0 } = req.query;
     Transcript.find().limit(limit).skip(page * limit).populate('Scenario').then(Transcripts => {
         res.json(Transcripts)
     }).catch(err => res.status(500).json(err.message))
