@@ -84,6 +84,9 @@ const ScenarioSchema = new mongoose.Schema(
         },
         Visible: {
             type: Boolean
+        },
+        Anonymize: {
+            type: Boolean
         }
     }, { timestamps: true }
 );

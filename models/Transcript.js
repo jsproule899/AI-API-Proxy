@@ -14,6 +14,9 @@ const transcriptSchema = new mongoose.Schema(
             type: mongoose.ObjectId,
             ref: Scenario
         },
+        StudentNo: {
+            type: String,
+        },
         Student: {
             type: String,
         },

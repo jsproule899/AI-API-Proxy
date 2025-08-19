@@ -19,7 +19,7 @@ const findById = async (req, res) => {
 
 const findByStudent = async (req, res) => {
     const { studentNo } = req.params;
-    Transcript.find({ Student: studentNo }).populate('Scenario').then(Transcript => {
+    Transcript.find({ StudentNo: studentNo }).populate('Scenario').then(Transcript => {
         res.json(Transcript)
     }).catch(err => res.status(500).json(err.message))
 
