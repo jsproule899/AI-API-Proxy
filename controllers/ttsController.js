@@ -73,13 +73,13 @@ const elevenLabs = async (req, res) => {
     }
 }
 
-const openAI = (req, res) => {
+const openAI = async (req, res) => {
 
     const { text, voice } = req.body;
 
     openai.audio.speech.create({
-        model: "tts-1",
-        voice,
+        model: "gpt-4o-mini-tts",
+        voice: voice,
         input: text
     }).then((mp3) => {
         const buffer = Buffer.from(mp3.arrayBuffer());
