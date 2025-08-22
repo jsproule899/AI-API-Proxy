@@ -5,7 +5,7 @@ const Scenario = require('../models/Scenario')
 const find = async (req, res) => {
     const { page=0, limit=0 } = req.query;
     Scenario.find().limit(limit).skip(page * limit).then(scenarios => {
-        if(!scenarios || scenarios.length === 0) res.json({}).status(204)
+        if(!scenarios || scenarios.length === 0) return res.status(204).json({});
         res.json(scenarios)
     }).catch(err => res.status(500).json(err.message))
 
