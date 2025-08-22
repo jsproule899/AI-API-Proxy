@@ -73,7 +73,7 @@ const elevenLabs = async (req, res) => {
     }
 }
 
-const openAI = async (req, res) => {
+const openAI = (req, res) => {
 
     const { text, voice } = req.body;
 
@@ -81,8 +81,8 @@ const openAI = async (req, res) => {
         model: "gpt-4o-mini-tts",
         voice: voice,
         input: text
-    }).then((mp3) => {
-        const buffer = Buffer.from(mp3.arrayBuffer());
+    }).then(async (mp3) => {
+        const buffer = Buffer.from(await mp3.arrayBuffer());
         res.set('Content-Type', 'audio/mp3')
         res.send(buffer);
     }).catch((err) => {
