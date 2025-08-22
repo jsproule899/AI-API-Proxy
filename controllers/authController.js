@@ -138,7 +138,7 @@ const requestReset = async (req, res) => {
             return res.status(404).json({ "message": "Incorrect Email Address." });
         }
 
-        let resetToken = crypto.randomBytes(32).toString("hex"); //TODO Email to user
+        let resetToken = crypto.randomBytes(32).toString("hex");
         const hash = await bcrypt.hash(resetToken, SALT_ROUNDS);
 
         await ResetToken.deleteOne({ userId: user._id })
@@ -176,14 +176,14 @@ const updatePassword = async (req, res) => {
             ]
         });
 
-        if (!user && !passwordResetToken) {
+        if (!user || !passwordResetToken) {
             return res.status(400).json({ "message": "Incorrect Email Address or reset token" });
         }
 
         if (!email) {
             const isTokenValid = await bcrypt.compare(resetToken, passwordResetToken.token);
             if (!isTokenValid) {
-                return res.status(400).json({ "message": "Token has expired." });
+                return res.status(400).json({ "message": "Token is invalid." });
             }
         }
 
