@@ -17,6 +17,9 @@ if (process.env.NODE_ENV === 'dev')
 
 const register = async (req, res, next) => {
     var { Email, StudentNo, Staff, roles, academicYear } = req.body
+
+    if (Email && !Email.includes("@qub.ac.uk")) return res.status(422).json({ "message": "Invalid QUB email, must end with qub.ac.uk" })
+
     var password = passGenerator.generate({
         length: 10,
         numbers: true
@@ -159,7 +162,7 @@ const requestReset = async (req, res) => {
 const updatePassword = async (req, res) => {
     const { resetToken, email, userId, password } = req.body;
 
-    const cookies = req.cookies;   
+    const cookies = req.cookies;
     const refreshToken = cookies.authjwt;
 
     if ((!resetToken && !email) || !password) {
@@ -169,6 +172,8 @@ const updatePassword = async (req, res) => {
     try {
         const passwordResetToken = await ResetToken.findOne({ userId: userId });
 
+        if(userId && !passwordResetToken) return res.status(498).json({"message": "Invalid or Expired reset token"});
+
         const user = await userDB.findOne({
             $or: [
                 { Email: email },
@@ -176,8 +181,8 @@ const updatePassword = async (req, res) => {
             ]
         });
 
-        if (!user || !passwordResetToken) {
-            return res.status(400).json({ "message": "Incorrect Email Address or reset token" });
+        if (!user) {
+            return res.status(404).json({ "message": "User Not Found" });
         }
 
         if (!email) {
