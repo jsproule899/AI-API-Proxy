@@ -3,137 +3,89 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Email</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-   
-     <style>
-        body {
-            background-color: #d6000d;
-            font-family: sans-serif;
-
-        }
-
-        .container {
-            display: flex;
-            flex-grow: 100vh;
-            flex-direction: column;
-            justify-content: center;
-
-            width: 100%;
-            margin: 30px 0px;
-        }
-
-        .email-body {
-            display: flex;
-            width: 80vw;
-            flex-direction: column;            
-            text-align: center;     
-            margin: auto;
-            background-color: #fafaf9;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            padding: 25px 50px;
-        }
-
-        @media (max-width: 364px) {
-        .email-body {
-            display: block;
-            width: 80vw;
-            flex-direction: column;            
-            text-align: center;     
-            margin: auto;
-            background-color: #fafaf9;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            padding: 25px 50px;
-        }
-    }
-
-        .btn-primary {
-            display: block;
-            width: fit-content;
-            
-        
-            margin: 20px auto;
-            background-color: #d6000d;
-            font-weight: bold;
-            color: white;
-            padding: 10px 30px;
-            text-decoration: none;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            text-align: center;
-
-        }
-
-        .btn-primary:hover {
-            background-color: darkred;
-        }
-
-        .logo {
-            display: flex;
-            margin: 10px 10vw;
-            
-
-        }
-
-        @media (max-width: 364px) {
-            .logo {
-                width: 20%;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: stretch;
-               
-
+    <style>
+        /* Responsive styles */
+        @media only screen and (max-width: 620px) {
+            .email-container {
+                width: 100% !important;
+                padding-left: 10px;
             }
         }
-
-        .logo-img {
-            display: flex;
-            padding-right: 20px;
-            border-right: 1px solid rgba(255, 255, 255, 0.555);
-            margin: 20px 20px;
-        }
-
-        .logo-heading {
-            display: flex;
-            color: #fff;
-            text-transform: uppercase;
-            margin: 20px 0px;
-            line-height: 1rem;
-            align-content: start;
-
-        }
     </style>
+</head>
 
-    <div class="container">
-        <div class="logo">
-            <img src="https://www.qub.ac.uk/schools/media/Media,767339,en.svg"
-                alt="Queens University Belfast School of Pharmacy Logo" height="60px" class="logo-img">
+<body style="margin:0; padding:0; background-color:#d6000d; font-family:sans-serif;">
 
-            <div class="logo-heading" style="display: inline-block;">
-                <p style="font-size: small; margin: 0;">School of</p>
-                <p style="font-weight: bold; font-size: medium; margin: 0; line-height: normal;">Pharmacy</p>
-            </div>
+    <!-- Wrapper Table -->
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" align="center"
+        style="background-color:#d6000d; padding: 30px 0;">
+        <!-- Logo Section -->
+        <tr>
+            <td align="center">
+                <!-- Email Container -->
+                <table role="presentation" class="email-container" width="600" cellspacing="0" cellpadding="0"
+                    border="0" style="text-align:center;">
+                    <tr>
+                        <td align="left" style="padding-bottom: 20px;">
+                            <img src="https://www.qub.ac.uk/schools/media/Media,767339,en.svg"
+                                alt="Queens University Belfast School of Pharmacy Logo" height="60"
+                                style="display:inline-block; vertical-align:middle; margin-right:15px; padding-right: 10px; border-right: solid #fff 2px;">
+                            <span class="logo-text"
+                                style="color:#fff; font-size:14px; text-transform:uppercase; display:inline-block; vertical-align:top;">
+                                <span style="display:block; font-size:12px;" align="left">School of</span>
+                                <strong style="font-size:16px;" align="left">Pharmacy</strong>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <!-- Email Container -->
+                <table role="presentation" class="email-container" width="600" cellspacing="0" cellpadding="0"
+                    border="0" style="background-color: #fafaf9; border-radius:5px; padding: 40px; text-align:center;">
+                    <!-- Content Section -->
+                    <tr>
+                        <td class="email-content">
+                            <h2 style="color:#000; font-size:24px; margin-bottom:40px;">Welcome!</h2>
+                            <p style="color:#000; font-size:16px;">Hi {{studentNo}},</p>
+                            <p style="color:#000; font-size:16px;">
+                                You've been granted access to the QAIRx Platform.
+                            </p>
+                            <p style="color:#000; font-size:16px;">
+                                Your temporary password is:
+                            </p>
+                            <p style="font-weight: 600; text-align: center;">
+                                {{password}}
+                            </p>
+                            <!-- Log In Button -->
+                            <a href="https://{{link}}" target="_blank"
+                                style="display:inline-block; margin:20px 0; background-color:#d6000d; color:#fff; font-weight:bold; padding:12px 24px; text-decoration:none; border-radius:5px; font-size:16px;">
+                                Log In
+                            </a>
 
-        </div>
+                            <p style="color:#000; font-size:16px;">
+                                If you didn't request access or no longer require an account, you can simply ignore this
+                                message.
+                            </p>
 
-        <div class="email-body">
-            <h2>Welcome!</h2>
-            <p>Hi {{studentNo}},</p>
-            <p>You've been granted access to the QAIRx Platform. Your temporary password is:</p>
-            <p style="font-weight: 600; text-align: center;">
-                {{password}}
-            </p>
-            <a target="_blank" class="btn-primary" href="https://{{link}}">Log In</a>
-            <p>If you didn't request access or no longer require an account, you can simply ignore this message.</p>
-            <hr />
-            <h3>Issue with the link?</h3>
-            <p>Simply copy and paste this link into your browser instead:</p>
-            <a href="https://{{link}}">https://{{link}}</a>
-        </div>
-    </div>
-    </body>
+                            <hr style="border:none; border-top:1px solid #ccc; margin:20px 0;">
+
+                            <h3 style="color:#000; font-size:20px;">Issue with the link?</h3>
+                            <p style="color:#000; font-size:16px;">Copy and paste this link into your browser:
+                            </p>
+                            <a href="https://{{link}}" style="color:#d6000d; font-size:16px;">https://{{link}}</a>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
 
 </html>
