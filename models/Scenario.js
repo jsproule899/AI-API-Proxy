@@ -67,6 +67,9 @@ const ScenarioSchema = new mongoose.Schema(
         Outcome: {
             type: String
         },
+        Justification: {
+            type: String
+        },
         AI: {
             type: String
         },
