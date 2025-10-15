@@ -12,7 +12,8 @@ const ScenarioSchema = new mongoose.Schema(
             type: String
         },
         Age: {
-            type: String
+            Years: { type: String },
+            Months: { type: String }
         },
         Gender: {
             type: String
@@ -25,7 +26,8 @@ const ScenarioSchema = new mongoose.Schema(
                 type: String
             },
             Age: {
-                type: String
+                Years: { type: String },
+                Months: { type: String }
             },
             Gender: {
                 type: String
